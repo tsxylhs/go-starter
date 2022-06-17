@@ -1,10 +1,10 @@
-package app
+package starter
 
 import (
 	"errors"
 	"html/template"
 
-	code "github.com/tsxylhs/go-starter"
+	starter "github.com/tsxylhs/go-starter"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
@@ -19,14 +19,14 @@ type DbStarter struct {
 	BaseStarter
 	Namespace string
 	DbHolder  DbHolder
-	listeners map[string][]code.DBListener
+	listeners map[string][]starter.DBListener
 }
 
-var dbListeners map[string][]code.DBListener
+var dbListeners map[string][]starter.DBListener
 
-func ListenDB(listeners ...code.DBListener) {
+func ListenDB(listeners ...starter.DBListener) {
 	if dbListeners == nil {
-		dbListeners = map[string][]code.DBListener{}
+		dbListeners = map[string][]starter.DBListener{}
 	}
 
 	for _, listener := range listeners {
@@ -36,7 +36,7 @@ func ListenDB(listeners ...code.DBListener) {
 	}
 }
 
-func (starter *DbStarter) Start(ctx *code.Context) error {
+func (starter *DbStarter) Start(ctx *starter.Context) error {
 	cfg := ctx.MustGet(starter.Namespace + ".config").(*viper.Viper)
 
 	dbns := cfg.GetStringMap("db")
@@ -78,7 +78,7 @@ type RedisStarter struct {
 	RedisHolder RedisHolder
 }
 
-func (starter *RedisStarter) Start(ctx *code.Context) error {
+func (starter *RedisStarter) Start(ctx *starter.Context) error {
 	cfg := ctx.MustGet(starter.Namespace + ".config").(*viper.Viper)
 
 	dbn := cfg.GetString(starter.Namespace + ".redis")

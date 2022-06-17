@@ -1,13 +1,14 @@
-package app
+package starter
 
 import (
 	"encoding/json"
 	"fmt"
 
-	code "github.com/tsxylhs/go-starter"
+	starter "github.com/tsxylhs/go-starter"
+	"github.com/tsxylhs/go-starter/log"
 
 	"github.com/spf13/viper"
-	"github.com/tsxylhs/go-starter/app/log"
+
 	"go.uber.org/zap"
 )
 
@@ -20,7 +21,7 @@ type LogStarter struct {
 	*BaseStarter
 }
 
-func (starter *LogStarter) Start(ctx *code.Context) error {
+func (starter *LogStarter) Start(ctx *starter.Context) error {
 	var logConfig zap.Config
 	var conf *viper.Viper = viper.New()
 	var err error

@@ -1,11 +1,11 @@
-package app
+package starter
 
 import (
 	"flag"
 	"fmt"
 
 	"github.com/spf13/viper"
-	code "github.com/tsxylhs/go-starter"
+	starter "github.com/tsxylhs/go-starter"
 )
 
 var confRoot *string
@@ -16,7 +16,7 @@ type ConfigLoader struct {
 	Config         *viper.Viper
 }
 
-func (cs *ConfigLoader) Start(ctx code.Context) error {
+func (cs *ConfigLoader) Start(ctx starter.Context) error {
 	return LoadConfig(cs.ConfigFileName, cs.Config)
 }
 func LoadConfig(name string, config *viper.Viper) error {

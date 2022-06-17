@@ -1,5 +1,19 @@
 package code
 
+const (
+	UserKey          = "user"
+	UserIdKey        = "uid"
+	UserFirstNameKey = "firstName"
+	UserLastNameKey  = "lastName"
+	UserEmailKey     = "email"
+	UserNicknameKey  = "nickname"
+	UserRoleKey      = "role"
+	UserRightKey     = "rights"
+	UserTypeKey      = "tp"
+	UserOrgIdKey     = "orgId"
+	UserGroupKey     = "group"
+)
+
 type Context map[string]interface{}
 
 func (ctx *Context) Get(key string) interface{} {

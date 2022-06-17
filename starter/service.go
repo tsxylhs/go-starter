@@ -1,6 +1,6 @@
-package app
+package starter
 
-import code "github.com/tsxylhs/go-starter"
+import starter "github.com/tsxylhs/go-starter"
 
 type Service struct {
 	BaseApp
@@ -16,7 +16,7 @@ func NewService(name string) *Service {
 	return service
 }
 
-func (app *Service) Start(ctx *code.Context) error {
+func (app *Service) Start(ctx *starter.Context) error {
 	//配置文件
 	app.Subscribe(app.name, app)
 

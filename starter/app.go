@@ -1,10 +1,10 @@
-package app
+package starter
 
 import (
 	"errors"
 	"fmt"
 
-	code "github.com/tsxylhs/go-starter"
+	starter "github.com/tsxylhs/go-starter"
 
 	"github.com/tsxylhs/go-starter/config"
 
@@ -29,7 +29,7 @@ type BaseApp struct {
 	Mounts   *[]App
 	isMaster bool
 	Rpc      bool
-	modules  []code.IModule
+	modules  []starter.IModule
 	DB       *xorm.Engine
 	Redis    *redis.Client
 }
@@ -72,7 +72,7 @@ func (app *BaseApp) Mount(apps ...App) App {
 }
 
 //启动
-func (app *BaseApp) Start(ctx *code.Context) error {
+func (app *BaseApp) Start(ctx *starter.Context) error {
 	(&app.Configurator).SetApp(app)
 	err := (&app.Configurator).Start(ctx)
 	if err != nil {
@@ -127,7 +127,7 @@ func (app *BaseApp) Start(ctx *code.Context) error {
 }
 
 //添加注册多个模块模型表
-func (app *BaseApp) Register(modules ...code.IModule) {
+func (app *BaseApp) Register(modules ...starter.IModule) {
 	app.modules = append(app.modules, modules...)
 }
 
@@ -143,7 +143,7 @@ func (configurator *Configurator) Subscribe(key string, target interface{}) {
 	configurator.Subscription = append(configurator.Subscription, config.Pair{Key: key, Target: target})
 }
 
-func (configurator *Configurator) Start(ctx *code.Context) error {
+func (configurator *Configurator) Start(ctx *starter.Context) error {
 	fileName := configurator.FileName
 	if fileName == "" {
 		fileName = configurator.app.Name()

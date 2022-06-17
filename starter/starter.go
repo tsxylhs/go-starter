@@ -1,4 +1,4 @@
-package app
+package starter
 
 //启动类
 import (
@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"sync"
 
-	code "github.com/tsxylhs/go-starter"
+	starter "github.com/tsxylhs/go-starter"
 )
 
 const (
@@ -25,7 +25,7 @@ type Starter interface {
 	SetAppName(appName string) Starter
 	SetApp(app App) Starter
 	AppName() string
-	Start(ctx *code.Context) error
+	Start(ctx *starter.Context) error
 	Started() bool
 	SetStarted(bool) Starter
 }
@@ -36,7 +36,7 @@ type BaseStarter struct {
 	started  bool
 	appName  string
 	app      App
-	action   func(ctx *code.Context) error
+	action   func(ctx *starter.Context) error
 }
 
 func NewBaseStarter(name string, priority int) *BaseStarter {
@@ -83,12 +83,12 @@ func (base *BaseStarter) SetApp(app App) Starter {
 	return base
 }
 
-func (base *BaseStarter) Action(action func(ctx *code.Context) error) Starter {
+func (base *BaseStarter) Action(action func(ctx *starter.Context) error) Starter {
 	base.action = action
 	return base
 }
 
-func (base *BaseStarter) Start(ctx *code.Context) error {
+func (base *BaseStarter) Start(ctx *starter.Context) error {
 	if base.action != nil {
 		return base.action(ctx)
 	}
@@ -97,7 +97,7 @@ func (base *BaseStarter) Start(ctx *code.Context) error {
 }
 
 //启动器监听类
-type StartListener func(ctx code.Context) error
+type StartListener func(ctx starter.Context) error
 
 func OnStarted(starterName string, listener StartListener) {
 	if controller.listenersMap == nil {
@@ -108,7 +108,7 @@ func OnStarted(starterName string, listener StartListener) {
 
 //启动控制类
 type StartController struct {
-	ctx           code.Context
+	ctx           starter.Context
 	mu            sync.RWMutex
 	startersMap   map[string]Starter
 	startersArray []Starter
@@ -124,7 +124,7 @@ func RegisterStarter(starter Starter) {
 	controller.register(starter)
 }
 func Start() error {
-	controller.ctx = code.Context{}
+	controller.ctx = starter.Context{}
 	err := controller.startNext()
 	controller = nil
 	return err
