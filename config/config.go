@@ -33,7 +33,7 @@ func Configer(names ...string) *viper.Viper {
 				fn = names[0]
 			}
 			Config.SetConfigName(fn)
-			Config.AddConfigPath("$HOME/.letsit.cn/")
+			Config.AddConfigPath("$HOME/.lncios.cn/")
 			Config.AddConfigPath(".")
 			err := Config.ReadInConfig()
 			if err != nil {

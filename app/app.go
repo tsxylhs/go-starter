@@ -1,10 +1,12 @@
 package app
 
 import (
-	"code"
-	"code/config"
 	"errors"
 	"fmt"
+
+	code "github.com/tsxylhs/go-starter"
+
+	"github.com/tsxylhs/go-starter/config"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"html/template"
 
-	"code"
+	code "github.com/tsxylhs/go-starter"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"

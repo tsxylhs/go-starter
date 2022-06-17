@@ -1,4 +1,4 @@
-module code
+module github.com/tsxylhs/go-starter
 
 go 1.17
 

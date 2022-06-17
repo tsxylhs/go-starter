@@ -1,6 +1,6 @@
 package app
 
-import "code"
+import code "github.com/tsxylhs/go-starter"
 
 type Service struct {
 	BaseApp

@@ -1,11 +1,11 @@
 package app
 
 import (
-	"code"
 	"flag"
 	"fmt"
 
 	"github.com/spf13/viper"
+	code "github.com/tsxylhs/go-starter"
 )
 
 var confRoot *string
@@ -24,7 +24,7 @@ func LoadConfig(name string, config *viper.Viper) error {
 	flag.Parse()
 	config.SetConfigName(name)
 	config.AddConfigPath(*confRoot)
-	config.AddConfigPath("$HOME/.letsit.cn/")
+	config.AddConfigPath("$HOME/.lncios.cn/")
 	config.AddConfigPath(".")
 	config.AddConfigPath("./conf")
 	err := config.ReadInConfig()
@@ -35,5 +35,5 @@ func LoadConfig(name string, config *viper.Viper) error {
 	return err
 }
 func init() {
-	confRoot = flag.String("conf-dir", "/etc/letsit.cn/", "config root dir")
+	confRoot = flag.String("conf-dir", "/etc/lncios.cn/", "config root dir")
 }
