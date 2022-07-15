@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	starterModle "github.com/tsxylhs/go-starter"
+	"github.com/tsxylhs/go-starter/errors"
 	"github.com/tsxylhs/go-starter/log"
 )
 
@@ -31,7 +32,7 @@ func (handler *Handler) User(c *gin.Context) interface{} {
 func (handler *Handler) Bind(c *gin.Context, domain interface{}) (err error) {
 	err = c.ShouldBind(domain)
 	if err != nil {
-		//return error(&errors.SimpleBizError{Code: errors.Common_InvalidParams, Msg: err.Error()})
+		return error(&errors.SimpleBizError{Code: errors.Common_InvalidParams, Msg: err.Error()})
 	}
 	return nil
 }
