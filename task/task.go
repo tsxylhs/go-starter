@@ -17,16 +17,21 @@ type Task struct {
 }
 
 // 1. 简单并发任务", "2.按时间来持续并发", "3.以 worker pool 方式 并发做事/发送请求", "4.等待异步任务执行结果"
-func (task *Task) Task1() {
+func (task *Task) SimpleConcurrency() {
 	var wg sync.WaitGroup
+	result := make(chan interface{})
 	for i := 0; i < task.CountPool; i++ {
 		wg.Add(1)
 		go func(index int) {
 			defer wg.Done()
-			task.Do()
+			for {
+				result <- task.Do()
+			}
 		}(i)
 	}
+	task.Results = result
 	wg.Wait()
+
 }
 
 // 按照时间持续并发

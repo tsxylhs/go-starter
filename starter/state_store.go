@@ -144,6 +144,7 @@ func (manager *StateManager) ParseUser() func(c *gin.Context) {
 }
 
 type StateBuilder func(map[string]interface{}, *gin.Context) interface{}
+
 type StateStore interface {
 	Use(engine *gin.Engine)
 	ParseUser(c *gin.Context)
