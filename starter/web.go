@@ -36,6 +36,7 @@ func NewWeb(name string) *Web {
 
 func (app *Web) Start(cxt *starter.Context) error {
 	app.Subscribe(app.name, app)
+
 	err := (&app.BaseApp).Start(cxt)
 	if err != nil {
 		return err
