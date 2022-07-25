@@ -104,12 +104,12 @@ func (dispatcher *Broker) Sub(topic string, handle func(client mqtt.Client, mess
 	return nil
 }
 
-func (mqttServer *MqttServer) NewBroker(cfg Config) (*Broker, error) {
-	client, err := mqttServer.buildClient(cfg)
-	return &Broker{
-		Client: client,
-	}, err
-}
+// func (mqttServer *MqttServer) NewBroker(cfg Config) (*Broker, error) {
+// 	client, err := mqttServer.buildClient(cfg)
+// 	return &Broker{
+// 		Client: client,
+// 	}, err
+// }
 
 func (mqttServer *MqttServer) buildClient(cfg Config) (client mqtt.Client, err error) {
 	log.Logger.Debug("create mqtt broker", zap.String("host", cfg.Host))
