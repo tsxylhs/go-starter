@@ -12,22 +12,22 @@ import (
 	"go.uber.org/zap"
 )
 
-type MqttServer struct {
+type MqttClient struct {
 	BaseApp
 	SharedBroker *Broker
 }
 
-func NewMqttServer(name string) *MqttServer {
-	mqttServer := &MqttServer{
+func NewMqttClient(name string) *MqttClient {
+	mqttClient := &MqttClient{
 		BaseApp: BaseApp{
 			name: name,
 		},
 	}
-	mqttServer.SetPriority(PriorityHigh)
-	return mqttServer
+	mqttClient.SetPriority(PriorityHigh)
+	return mqttClient
 }
 
-func (app *MqttServer) Start(cxt *starter.Context) error {
+func (app *MqttClient) Start(cxt *starter.Context) error {
 	app.Subscribe(app.name, app)
 	err := (&app.BaseApp).Start(cxt)
 	if err != nil {
@@ -104,14 +104,14 @@ func (dispatcher *Broker) Sub(topic string, handle func(client mqtt.Client, mess
 	return nil
 }
 
-// func (mqttServer *MqttServer) NewBroker(cfg Config) (*Broker, error) {
-// 	client, err := mqttServer.buildClient(cfg)
+// func (mqttClient *MqttClient) NewBroker(cfg Config) (*Broker, error) {
+// 	client, err := mqttClient.buildClient(cfg)
 // 	return &Broker{
 // 		Client: client,
 // 	}, err
 // }
 
-func (mqttServer *MqttServer) buildClient(cfg Config) (client mqtt.Client, err error) {
+func (mqttClient *MqttClient) buildClient(cfg Config) (client mqtt.Client, err error) {
 	log.Logger.Debug("create mqtt broker", zap.String("host", cfg.Host))
 	opts := cfg.AddBroker(cfg.Host)
 	opts.SetClientID(cfg.ClientID)
@@ -137,7 +137,7 @@ func (mqttServer *MqttServer) buildClient(cfg Config) (client mqtt.Client, err e
 var Clients map[string]mqtt.Client
 var m sync.Mutex
 
-func (mqttServer *MqttServer) BuildClients(ctx *starter.Context) error {
+func (mqttClient *MqttClient) BuildClients(ctx *starter.Context) error {
 	m.Lock()
 	defer m.Unlock()
 	if Clients == nil {
@@ -145,10 +145,10 @@ func (mqttServer *MqttServer) BuildClients(ctx *starter.Context) error {
 	}
 
 	var confs map[string]Config
-	if mqttServer.RawConfig == nil {
+	if mqttClient.RawConfig == nil {
 		return errors.New("build mqtt clients failure, no config found in core service")
 	}
-	err := mqttServer.RawConfig.UnmarshalKey("mqtt", &confs)
+	err := mqttClient.RawConfig.UnmarshalKey("mqtt", &confs)
 	if err != nil {
 		return err
 	}
@@ -157,21 +157,21 @@ func (mqttServer *MqttServer) BuildClients(ctx *starter.Context) error {
 		return nil
 	}
 	for key, value := range confs {
-		client, err := mqttServer.buildClient(value)
+		client, err := mqttClient.buildClient(value)
 		if err != nil {
 			return err
 		}
 		Clients[key] = client
 		if value.Default {
 			Clients[clientNameDefault] = client
-			mqttServer.SharedBroker = &Broker{
+			mqttClient.SharedBroker = &Broker{
 				Client: client,
 			}
 		}
 	}
-	if mqttServer.SharedBroker == nil && len(confs) > 0 {
+	if mqttClient.SharedBroker == nil && len(confs) > 0 {
 		for _, value := range Clients {
-			mqttServer.SharedBroker = &Broker{
+			mqttClient.SharedBroker = &Broker{
 				Client: value,
 			}
 			break
