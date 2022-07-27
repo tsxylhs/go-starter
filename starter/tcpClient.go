@@ -62,7 +62,10 @@ func (tcpClient *TcpClient) BuildClient(ctx *starter.Context) error {
 		conn, err := net.DialTCP(tcpConfig.Protocol, nil, tcpAddr)
 		if err != nil {
 			log.Logger.Logger.Error("tcp 链接失败")
-			tcpClient.SharedBroker.IsConnection = false
+			tcpClient.SharedBroker = &TcpBroker{
+				IsConnection: false,
+				ConnTcp:      nil,
+			}
 			return err
 		} else {
 			tcpClient.SharedBroker = &TcpBroker{
@@ -71,35 +74,37 @@ func (tcpClient *TcpClient) BuildClient(ctx *starter.Context) error {
 			}
 		}
 		var heatbeatCount = 0
-		for {
-			if !tcpClient.SharedBroker.IsConnection {
-				conn, err := net.DialTCP("tcp", nil, tcpAddr)
-				tcpClient.SharedBroker.mutex.Lock()
-				if err != nil {
-					log.Logger.Logger.Error("tcp 链接失败")
-					tcpClient.SharedBroker.IsConnection = false
-				} else {
+		go func(int, *TcpClient) {
+			for {
+				if !tcpClient.SharedBroker.IsConnection {
+					conn, err := net.DialTCP("tcp", nil, tcpAddr)
+					tcpClient.SharedBroker.mutex.Lock()
+					if err != nil {
+						log.Logger.Logger.Error("tcp 链接失败")
+						tcpClient.SharedBroker.IsConnection = false
+					} else {
 
-					conn.SetKeepAlive(true)
-					tcpClient.SharedBroker = &TcpBroker{
-						IsConnection: true,
-						ConnTcp:      conn,
+						conn.SetKeepAlive(true)
+						tcpClient.SharedBroker = &TcpBroker{
+							IsConnection: true,
+							ConnTcp:      conn,
+						}
 					}
+
+				} else {
+					//心跳检验
+					heatbeatCount++
+					if heatbeatCount == tcpConfig.Heartbeat {
+						heatbeatCount = 0
+						tcpClient.SharedBroker.ConnTcp.Write([]byte("is connected"))
+						time.Sleep(100 * time.Millisecond)
+
+					}
+
 				}
-
-			} else {
-				//心跳检验
-				heatbeatCount++
-				if heatbeatCount == tcpConfig.Heartbeat {
-					heatbeatCount = 0
-					tcpClient.SharedBroker.Conn.Write([]byte("is connected"))
-					time.Sleep(100 * time.Millisecond)
-
-				}
-
+				time.Sleep(1 * time.Second)
 			}
-			time.Sleep(1 * time.Second)
-		}
+		}(heatbeatCount, tcpClient)
 	}
 	return nil
 
