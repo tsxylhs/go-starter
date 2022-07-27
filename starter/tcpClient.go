@@ -73,8 +73,9 @@ func (tcpClient *TcpClient) BuildClient(ctx *starter.Context) error {
 				ConnTcp:      conn,
 			}
 		}
-		var heatbeatCount = 0
-		go func(int, *TcpClient) {
+
+		go func(*TcpClient) {
+			var heatbeatCount = 0
 			for {
 				if !tcpClient.SharedBroker.IsConnection {
 					conn, err := net.DialTCP("tcp", nil, tcpAddr)
@@ -104,7 +105,7 @@ func (tcpClient *TcpClient) BuildClient(ctx *starter.Context) error {
 				}
 				time.Sleep(1 * time.Second)
 			}
-		}(heatbeatCount, tcpClient)
+		}(tcpClient)
 	}
 	return nil
 
