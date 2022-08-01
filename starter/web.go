@@ -27,7 +27,9 @@ type Web struct {
 func NewWeb(name string) *Web {
 	web := &Web{
 		BaseApp: BaseApp{
-			name: name,
+			name:    name,
+			isDB:    true,
+			isRedis: true,
 		},
 	}
 	web.SetPriority(PriorityHigh)

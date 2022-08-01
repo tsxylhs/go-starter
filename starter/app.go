@@ -30,6 +30,8 @@ type BaseApp struct {
 	isMaster bool
 	Rpc      bool
 	modules  []starter.IModule
+	isDB     bool
+	isRedis  bool
 	DB       *xorm.Engine
 	Redis    *redis.Client
 }
@@ -94,28 +96,31 @@ func (app *BaseApp) Start(ctx *starter.Context) error {
 			}
 		}
 	}
-
+	//
 	//数据库
-	RegisterStarter(&DbStarter{
-		BaseStarter: BaseStarter{
-			name:     app.Name() + ".DB",
-			priority: PriorityMiddle,
-		},
-		Namespace: app.name,
-		//DbHolder:  app,
-	})
-	fmt.Println("数据库的启动器已注册")
-
-	//redis
-	RegisterStarter(&RedisStarter{
-		BaseStarter: BaseStarter{
-			name:     app.Name() + ".REDIS",
-			priority: PriorityMiddle,
-		},
-		Namespace:   app.name,
-		RedisHolder: app,
-	})
-	fmt.Println("redis的启动器已注册")
+	if app.isDB {
+		RegisterStarter(&DbStarter{
+			BaseStarter: BaseStarter{
+				name:     app.Name() + ".DB",
+				priority: PriorityMiddle,
+			},
+			Namespace: app.name,
+			//DbHolder:  app,
+		})
+		fmt.Println("数据库的启动器已注册")
+	}
+	if app.isRedis {
+		//redis
+		RegisterStarter(&RedisStarter{
+			BaseStarter: BaseStarter{
+				name:     app.Name() + ".REDIS",
+				priority: PriorityMiddle,
+			},
+			Namespace:   app.name,
+			RedisHolder: app,
+		})
+		fmt.Println("redis的启动器已注册")
+	}
 	if app.isMaster && app.Mounts != nil {
 		fmt.Println("register mounts")
 		for _, mnt := range *app.Mounts {

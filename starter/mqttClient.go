@@ -20,7 +20,9 @@ type MqttClient struct {
 func NewMqttClient(name string) *MqttClient {
 	mqttClient := &MqttClient{
 		BaseApp: BaseApp{
-			name: name,
+			name:    name,
+			isDB:    false,
+			isRedis: false,
 		},
 	}
 	mqttClient.SetPriority(PriorityHigh)

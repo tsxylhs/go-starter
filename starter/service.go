@@ -9,7 +9,9 @@ type Service struct {
 func NewService(name string) *Service {
 	service := &Service{
 		BaseApp: BaseApp{
-			name: name,
+			name:    name,
+			isDB:    true,
+			isRedis: true,
 		},
 	}
 	service.SetPriority(PriorityHigh)

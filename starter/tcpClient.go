@@ -20,7 +20,9 @@ type TcpClient struct {
 func NewTcpClient(name string) *TcpClient {
 	tcpClient := &TcpClient{
 		BaseApp: BaseApp{
-			name: name,
+			name:    name,
+			isDB:    false,
+			isRedis: false,
 		},
 	}
 	tcpClient.SetPriority(PriorityHigh)
