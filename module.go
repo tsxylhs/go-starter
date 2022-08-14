@@ -14,3 +14,13 @@ type IModule interface {
 	GetName() string
 	GetTableName() string
 }
+
+type EmailConf struct {
+	Type      string
+	Host      string
+	Port      int
+	EnableSsl bool
+	UserName  string
+	Password  string
+	CronTime  string
+}

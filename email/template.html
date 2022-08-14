@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+<style>
+    table, th, td {font-size:12px; border-spacing: 0px;border: 1px solid black;}
+</style>
+
+<body>
+    <h4>Dear Sir/Madam</h4>
+    &nbsp;&nbsp;&nbsp;&nbsp; 以下是使用统计情况。请查收，谢谢！</br>
+    <div> 1.保养完成情况</div>
+    </br>
+    <h3>{{.Message1}}</h3>
+    <table>
+        <tr bgcolor="#519fe9">
+            <th>序号</th>
+         
+        </tr>
+        {{range $i, $v := .JigStatistics}}
+            <tr>
+                <th>{{$i}}</th>
+               
+            {{end}}
+
+
+        </tr>
+    </table>
+    <div> 2.计划</div>
+    <h3>{{.Message2}}</h3>
+    </br>
+    <table border="0.3">
+        <tr bgcolor="#519fe9">
+            <th>序号</th>
+          
+        </tr>
+        {{range $i, $v := .JigStatistics}}
+        <tr >
+                <th>{{$i}}</th>
+               
+           {{end}}
+
+        </tr>
+    </table>
+</body>
+
+</html>
