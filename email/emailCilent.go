@@ -38,12 +38,12 @@ func SendMail(emailConfig code.EmailConf, toUsers []string, data *interface{}) e
 		// MaintainPlanData []model.MaintenancePlanDto
 	}{
 		Message1: "使用情况总计 统计时间：" + start + "--" + endtime,
-		Message2: "保养计划    统计时间：" + endtime,
+		Message2: "test    统计时间：" + endtime,
 		// JigStatistics:    data.JigStatisticsDto,
 		// MaintainPlanData: data.MaintainPlanData,
 	})
 	e.HTML = body.Bytes()
-	e.AttachFile("./RFID管理系统资料统计.xls")
+	e.AttachFile("./test.xls")
 	auth := NewLoginAuth(emailConfig.UserName, emailConfig.Password)
 	err = e.Send(emailConfig.Host+":"+strconv.Itoa(emailConfig.Port), auth)
 	if err != nil {
