@@ -6,12 +6,12 @@ type Service struct {
 	BaseApp
 }
 
-func NewService(name string) *Service {
+func NewService(name string, db, redis bool) *Service {
 	service := &Service{
 		BaseApp: BaseApp{
 			name:    name,
-			isDB:    true,
-			isRedis: true,
+			isDB:    db,
+			isRedis: redis,
 		},
 	}
 	service.SetPriority(PriorityHigh)
