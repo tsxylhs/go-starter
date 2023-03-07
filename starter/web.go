@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/log"
 	"go.uber.org/zap"
 )
@@ -36,7 +36,7 @@ func NewWeb(name string) *Web {
 	return web
 }
 
-func (app *Web) Start(cxt *starter.Context) error {
+func (app *Web) Start(cxt *code.Context) error {
 	app.Subscribe(app.name, app)
 
 	err := (&app.BaseApp).Start(cxt)
@@ -67,12 +67,12 @@ func (app *Web) Start(cxt *starter.Context) error {
 
 func (web *Web) HtmlUserInterceptor(c *gin.Context) {
 	//log.Logger.Debug("HTML User Interceptor: check user id in context", zap.Int64("id", c.GetInt64(common.UserIdKey)))
-	if c.GetInt64(starter.UserIdKey) <= 0 {
+	if c.GetInt64(code.UserIdKey) <= 0 {
 		c.Redirect(http.StatusTemporaryRedirect, web.LoginUrl)
 		return
 	}
 
-	log.Logger.Debug("user has login", zap.Int64("id", c.GetInt64(starter.UserIdKey)))
+	log.Logger.Debug("user has login", zap.Int64("id", c.GetInt64(code.UserIdKey)))
 	c.Next()
 }
 

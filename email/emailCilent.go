@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	code "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 )
 
 func SendMail(emailConfig code.EmailConf, toUsers []string, data *interface{}) error {

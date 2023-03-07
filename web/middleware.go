@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	startModel "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/log"
 	"github.com/tsxylhs/go-starter/starter"
 	"go.uber.org/zap"
@@ -58,9 +58,9 @@ func CorsHandler(webapp *starter.Web) func(c *gin.Context) {
 }
 
 var UserInterceptor = func(c *gin.Context) {
-	v, ok := c.Get(startModel.UserKey)
+	v, ok := c.Get(code.UserKey)
 	if ok {
-		if v.(startModel.IdInf).GetId() > 0 {
+		if v.(code.IdInf).GetId() > 0 {
 			c.Next()
 			return
 		}

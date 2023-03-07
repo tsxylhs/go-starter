@@ -12,7 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	redisDriver "github.com/gomodule/redigo/redis"
 	"github.com/spf13/viper"
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/log"
 	"go.uber.org/zap"
 )
@@ -77,7 +77,7 @@ type StateManagerStarter struct {
 	StateManagerHolder **StateManager
 }
 
-func (starter *StateManagerStarter) Start(ctx *starter.Context) error {
+func (starter *StateManagerStarter) Start(ctx *code.Context) error {
 	log.Logger.Debug("start state manager")
 	cfg := ctx.MustGet(starter.Namespace + ".config").(*viper.Viper)
 
@@ -101,7 +101,7 @@ func (starter *StateManagerStarter) Start(ctx *starter.Context) error {
 	return nil
 }
 
-func NewStateManager(config *viper.Viper, ctx *starter.Context) (manager *StateManager, err error) {
+func NewStateManager(config *viper.Viper, ctx *code.Context) (manager *StateManager, err error) {
 	tp := config.GetString("type")
 
 	var store StateStore
@@ -319,7 +319,7 @@ type SessionStore struct {
 	realStore sessions.Store
 }
 
-func newSessionStore(opt SessionOptions, ctx *starter.Context) (store *SessionStore, err error) {
+func newSessionStore(opt SessionOptions, ctx *code.Context) (store *SessionStore, err error) {
 	store = &SessionStore{Options: opt}
 	var realStore sessions.Store
 
@@ -357,7 +357,7 @@ func (ss *SessionStore) Use(engine *gin.Engine) {
 
 func (ss *SessionStore) ParseUser(c *gin.Context) {
 	session := sessions.Default(c)
-	userStr := session.Get(starter.UserKey)
+	userStr := session.Get(code.UserKey)
 	if userStr != nil {
 		userFields := map[string]interface{}{}
 		err := json.Unmarshal(([]byte)(userStr.(string)), &userFields)
@@ -380,7 +380,7 @@ func (ss *SessionStore) SetUser(c *gin.Context, user map[string]interface{}) err
 	if err != nil {
 		return err
 	}
-	sess.Set(starter.UserKey, string(bts))
+	sess.Set(code.UserKey, string(bts))
 
 	return sess.Save()
 }

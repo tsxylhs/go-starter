@@ -1,6 +1,6 @@
 package starter
 
-import starter "github.com/tsxylhs/go-starter"
+import code "github.com/tsxylhs/go-starter/domain"
 
 type Service struct {
 	BaseApp
@@ -18,7 +18,7 @@ func NewService(name string, db, redis bool) *Service {
 	return service
 }
 
-func (app *Service) Start(ctx *starter.Context) error {
+func (app *Service) Start(ctx *code.Context) error {
 	//配置文件
 	app.Subscribe(app.name, app)
 

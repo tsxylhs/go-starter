@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 
 	"github.com/tsxylhs/go-starter/config"
 
@@ -13,7 +13,7 @@ import (
 	"xorm.io/xorm"
 )
 
-//app interface
+// app interface
 type App interface {
 	Starter
 	Mount(app ...App) App
@@ -29,14 +29,14 @@ type BaseApp struct {
 	Mounts   *[]App
 	isMaster bool
 	Rpc      bool
-	modules  []starter.IModule
+	modules  []code.IModule
 	isDB     bool
 	isRedis  bool
 	DB       *xorm.Engine
 	Redis    *redis.Client
 }
 
-//封装
+// 封装
 func (app *BaseApp) SetMaster(master App) {
 	app.master = master
 }
@@ -57,7 +57,7 @@ func (app *BaseApp) SetConfigFileName(name string) App {
 	return app
 }
 
-//启动项挂载
+// 启动项挂载
 func (app *BaseApp) Mount(apps ...App) App {
 	app.isMaster = true
 	if app.Mounts == nil {
@@ -73,8 +73,8 @@ func (app *BaseApp) Mount(apps ...App) App {
 	return app
 }
 
-//启动
-func (app *BaseApp) Start(ctx *starter.Context) error {
+// 启动
+func (app *BaseApp) Start(ctx *code.Context) error {
 	(&app.Configurator).SetApp(app)
 	err := (&app.Configurator).Start(ctx)
 	if err != nil {
@@ -131,8 +131,8 @@ func (app *BaseApp) Start(ctx *starter.Context) error {
 	return nil
 }
 
-//添加注册多个模块模型表
-func (app *BaseApp) Register(modules ...starter.IModule) {
+// 添加注册多个模块模型表
+func (app *BaseApp) Register(modules ...code.IModule) {
 	app.modules = append(app.modules, modules...)
 }
 
@@ -143,12 +143,12 @@ type Configurator struct {
 	Subscription []config.Pair
 }
 
-//封装set
+// 封装set
 func (configurator *Configurator) Subscribe(key string, target interface{}) {
 	configurator.Subscription = append(configurator.Subscription, config.Pair{Key: key, Target: target})
 }
 
-func (configurator *Configurator) Start(ctx *starter.Context) error {
+func (configurator *Configurator) Start(ctx *code.Context) error {
 	fileName := configurator.FileName
 	if fileName == "" {
 		fileName = configurator.app.Name()

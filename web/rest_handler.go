@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	common "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/errors"
 	"github.com/tsxylhs/go-starter/log"
 	"go.uber.org/zap"
@@ -75,7 +75,7 @@ func (handler *RestHandler) NotFound(c *gin.Context) {
 	c.AbortWithStatus(http.StatusNotFound)
 }
 
-func (handler *RestHandler) ResultWithError(c *gin.Context, result common.IResult, err error) {
+func (handler *RestHandler) ResultWithError(c *gin.Context, result code.IResult, err error) {
 	if err != nil {
 		log.Logger.Warn("api fail", zap.Error(err))
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -84,7 +84,7 @@ func (handler *RestHandler) ResultWithError(c *gin.Context, result common.IResul
 	}
 }
 
-func (handler *RestHandler) Result(c *gin.Context, result common.IResult) {
+func (handler *RestHandler) Result(c *gin.Context, result code.IResult) {
 	if result == nil {
 		c.AbortWithStatus(http.StatusOK)
 		return
@@ -128,7 +128,7 @@ func ApiFail(c *gin.Context, err error) {
 			return
 		}
 	}
-	c.AbortWithStatusJSON(http.StatusInternalServerError, &common.Result{Ok: false, Error: errors.ServerErrorWithMsg(err.Error())})
+	c.AbortWithStatusJSON(http.StatusInternalServerError, &code.Result{Ok: false, Error: errors.ServerErrorWithMsg(err.Error())})
 }
 
 // func (handler *RestHandler) ValidateInt64Id(c *gin.Context) (id int64, err error) {

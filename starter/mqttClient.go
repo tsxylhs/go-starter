@@ -7,7 +7,7 @@ import (
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/log"
 	"go.uber.org/zap"
 )
@@ -29,7 +29,7 @@ func NewMqttClient(name string) *MqttClient {
 	return mqttClient
 }
 
-func (app *MqttClient) Start(cxt *starter.Context) error {
+func (app *MqttClient) Start(cxt *code.Context) error {
 	app.Subscribe(app.name, app)
 	err := (&app.BaseApp).Start(cxt)
 	if err != nil {
@@ -86,7 +86,7 @@ func (dispatcher *Broker) UnSub(topic string) error {
 	return dispatcher.Unsubscribe(topic).Error()
 }
 
-//Pub 消息发送
+// Pub 消息发送
 func (dispatcher *Broker) Pub(topic string, payload []byte, options ...Options) error {
 
 	if token := dispatcher.Publish(topic, 2, false, payload); token.Error() != nil {
@@ -139,7 +139,7 @@ func (mqttClient *MqttClient) buildClient(cfg Config) (client mqtt.Client, err e
 var Clients map[string]mqtt.Client
 var m sync.Mutex
 
-func (mqttClient *MqttClient) BuildClients(ctx *starter.Context) error {
+func (mqttClient *MqttClient) BuildClients(ctx *code.Context) error {
 	m.Lock()
 	defer m.Unlock()
 	if Clients == nil {

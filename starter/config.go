@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/viper"
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 )
 
 var confRoot *string
@@ -16,7 +16,7 @@ type ConfigLoader struct {
 	Config         *viper.Viper
 }
 
-func (cs *ConfigLoader) Start(ctx starter.Context) error {
+func (cs *ConfigLoader) Start(ctx code.Context) error {
 	return LoadConfig(cs.ConfigFileName, cs.Config)
 }
 func LoadConfig(name string, config *viper.Viper) error {

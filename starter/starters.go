@@ -4,7 +4,7 @@ import (
 	"errors"
 	"html/template"
 
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
@@ -19,14 +19,14 @@ type DbStarter struct {
 	BaseStarter
 	Namespace string
 	DbHolder  DbHolder
-	listeners map[string][]starter.DBListener
+	listeners map[string][]code.DBListener
 }
 
-var dbListeners map[string][]starter.DBListener
+var dbListeners map[string][]code.DBListener
 
-func ListenDB(listeners ...starter.DBListener) {
+func ListenDB(listeners ...code.DBListener) {
 	if dbListeners == nil {
-		dbListeners = map[string][]starter.DBListener{}
+		dbListeners = map[string][]code.DBListener{}
 	}
 
 	for _, listener := range listeners {
@@ -36,12 +36,12 @@ func ListenDB(listeners ...starter.DBListener) {
 	}
 }
 
-func (starter *DbStarter) Start(ctx *starter.Context) error {
-	cfg := ctx.MustGet(starter.Namespace + ".config").(*viper.Viper)
+func (code *DbStarter) Start(ctx *code.Context) error {
+	cfg := ctx.MustGet(code.Namespace + ".config").(*viper.Viper)
 
 	dbns := cfg.GetStringMap("db")
 	if len(dbns) == 0 {
-		//log.Slog.Warn("no db config found for db starter ", starter.name)
+		//log.Slog.Warn("no db config found for db code ", code.name)
 		return nil
 	}
 
@@ -78,10 +78,10 @@ type RedisStarter struct {
 	RedisHolder RedisHolder
 }
 
-func (starter *RedisStarter) Start(ctx *starter.Context) error {
-	cfg := ctx.MustGet(starter.Namespace + ".config").(*viper.Viper)
+func (code *RedisStarter) Start(ctx *code.Context) error {
+	cfg := ctx.MustGet(code.Namespace + ".config").(*viper.Viper)
 
-	dbn := cfg.GetString(starter.Namespace + ".redis")
+	dbn := cfg.GetString(code.Namespace + ".redis")
 	if dbn == "" {
 		return nil
 	}
@@ -98,7 +98,7 @@ func (starter *RedisStarter) Start(ctx *starter.Context) error {
 		conn = ctx.Get("redis." + dbn).(*redis.Client)
 	}
 
-	starter.RedisHolder.SetRedisConnection(conn)
+	code.RedisHolder.SetRedisConnection(conn)
 
 	return nil
 }
@@ -175,11 +175,11 @@ type HtmlTemplateStarter struct {
 	HtmlTemplateFuncMap template.FuncMap
 }
 
-func (starter *HtmlTemplateStarter) Start() (err error) {
-	if starter.RootDir == "" {
+func (code *HtmlTemplateStarter) Start() (err error) {
+	if code.RootDir == "" {
 		return errors.New("no template root")
 	}
 
-	*starter.HtmlTemplateHolder = template.Must(template.New("").Funcs(starter.HtmlTemplateFuncMap).ParseGlob(starter.RootDir + "/*.html"))
+	*code.HtmlTemplateHolder = template.Must(template.New("").Funcs(code.HtmlTemplateFuncMap).ParseGlob(code.RootDir + "/*.html"))
 	return nil
 }

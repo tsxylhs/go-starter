@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	starter "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/log"
 )
 
@@ -29,7 +29,7 @@ func NewTcpClient(name string) *TcpClient {
 	return tcpClient
 
 }
-func (app *TcpClient) Start(ctx *starter.Context) error {
+func (app *TcpClient) Start(ctx *code.Context) error {
 	app.Subscribe(app.name, app)
 	err := (&app.BaseApp).Start(ctx)
 	if err != nil {
@@ -47,7 +47,7 @@ type TcpBroker struct {
 	mutex        sync.Mutex
 }
 
-func (tcpClient *TcpClient) BuildClient(ctx *starter.Context) error {
+func (tcpClient *TcpClient) BuildClient(ctx *code.Context) error {
 	var tcpConfig TcpConfig
 	if tcpClient.RawConfig == nil {
 		return errors.New("build tcp clients failure, no config found in core service")

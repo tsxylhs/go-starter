@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	starterModle "github.com/tsxylhs/go-starter"
+	code "github.com/tsxylhs/go-starter/domain"
 	"github.com/tsxylhs/go-starter/errors"
 	"github.com/tsxylhs/go-starter/log"
 )
@@ -17,15 +17,15 @@ func (handler *Handler) Register(router *gin.Engine) {
 }
 
 func (handler *Handler) UID(c *gin.Context) int64 {
-	user, ok := c.Get(starterModle.UserKey)
+	user, ok := c.Get(code.UserKey)
 	if !ok || user == nil {
 		return 0
 	}
-	return user.(starterModle.IdInf).GetId()
+	return user.(code.IdInf).GetId()
 }
 
 func (handler *Handler) User(c *gin.Context) interface{} {
-	user, _ := c.Get(starterModle.UserKey)
+	user, _ := c.Get(code.UserKey)
 	return user
 }
 
