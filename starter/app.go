@@ -22,6 +22,7 @@ type App interface {
 	IsMaster() bool
 }
 
+//基类
 type BaseApp struct {
 	Configurator
 	name     string
