@@ -25,7 +25,7 @@ func LoadConfig(name string, config *viper.Viper) error {
 	config.SetConfigName(name)
 	config.AddConfigPath(*confRoot)
 	config.AddConfigPath("$HOME/.lncios.cn/")
-	config.AddConfigPath(".")
+	config.AddConfigPath("./")
 	config.AddConfigPath("./conf")
 	err := config.ReadInConfig()
 	if err != nil {
