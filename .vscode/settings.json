@@ -1,0 +1,31 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "10.151.5.216",
+            "port": 30306,
+            "driver": "MySQL",
+            "name": "studo",
+            "username": "root",
+            "database": "guns",
+            "askForPassword": true
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "39.100.19.104",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "39.100.19.104",
+            "database": "iot",
+            "username": "root",
+            "password": "abc12345"
+        }
+    ]
+}

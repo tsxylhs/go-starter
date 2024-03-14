@@ -92,6 +92,7 @@ func (app *BaseApp) Start(ctx *code.Context) error {
 			}
 			if ctx.Get("db."+dbn) == nil {
 				//db启动器
+				ListenDB(module)
 			} else {
 				module.SetDB(ctx.Get("db." + dbn).(*xorm.Engine))
 			}
