@@ -13,7 +13,7 @@ import (
 	"xorm.io/xorm"
 )
 
-// app interface
+// app interface 实现
 type App interface {
 	Starter
 	Mount(app ...App) App
