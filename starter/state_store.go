@@ -2,7 +2,7 @@ package starter
 
 import (
 	"encoding/json"
-	be "errors"
+	errs "errors"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -28,7 +28,7 @@ type StateManager struct {
 
 func (manager *StateManager) SetAll(c *gin.Context, values map[string]interface{}) error {
 	if manager.Store == nil {
-		return be.New("no state store provided")
+		return errs.New("no state store provided")
 	}
 
 	return manager.Store.SetAll(c, values)
@@ -36,7 +36,7 @@ func (manager *StateManager) SetAll(c *gin.Context, values map[string]interface{
 
 func (manager *StateManager) ClearAll(c *gin.Context, values map[string]interface{}) error {
 	if manager.Store == nil {
-		return be.New("no state store provided")
+		return errs.New("no state store provided")
 	}
 
 	return manager.Store.ClearAll(c, values)
@@ -44,7 +44,7 @@ func (manager *StateManager) ClearAll(c *gin.Context, values map[string]interfac
 
 func (manager *StateManager) SetUser(c *gin.Context, user map[string]interface{}) error {
 	if manager.Store == nil {
-		return be.New("no state store provided")
+		return errs.New("no state store provided")
 	}
 
 	return manager.Store.SetUser(c, user)
@@ -130,7 +130,7 @@ func NewStateManager(config *viper.Viper, ctx *code.Context) (manager *StateMana
 			return nil, err
 		}
 	} else {
-		return nil, be.New("invalid state manager type " + tp)
+		return nil, errs.New("invalid state manager type " + tp)
 	}
 
 	return &StateManager{Store: store}, nil
@@ -328,7 +328,7 @@ func newSessionStore(opt SessionOptions, ctx *code.Context) (store *SessionStore
 	} else if opt.StoreType == "redis" {
 		conn := ctx.Get("redis." + opt.Redis)
 		if conn == nil {
-			return nil, be.New("try to build session store with empty redis reference " + opt.Redis)
+			return nil, errs.New("try to build session store with empty redis reference " + opt.Redis)
 		}
 		realStore, err = redis.NewStoreWithPool(conn.(*redisDriver.Pool), []byte(opt.Secret))
 		if err != nil {

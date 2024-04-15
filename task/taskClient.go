@@ -8,10 +8,10 @@ import (
 )
 
 type Runer struct {
-	Interrupt chan os.Signal   //发送的信号。从系统
-	Complte   chan error       //通道报告处理任务已经完成
-	Timeout   <-chan time.Time //任务超时
-	Tasks     []func(interface{})
+	Interrupt chan os.Signal      //发送的信号。从系统
+	Complte   chan error          //通道报告处理任务已经完成
+	Timeout   <-chan time.Time    //任务超时
+	Tasks     []func(interface{}) //task 接收func数组
 }
 
 //定义error类型
@@ -19,7 +19,7 @@ type Runer struct {
 var ErrTimeOut = errors.New("received timeout")
 var ErrInterrupt = errors.New("received intterrupt")
 
-//返回一个准备使用的Runer
+// 返回一个准备使用的Runer
 func New(d time.Duration) *Runer {
 	return &Runer{
 		Interrupt: make(chan os.Signal, 1),
@@ -51,7 +51,7 @@ func (r *Runer) Start() error {
 	}
 }
 
-//执行
+// 执行
 func (r *Runer) run() error {
 	for id, task := range r.Tasks {
 		if r.gotInterrupt() {
@@ -62,7 +62,7 @@ func (r *Runer) run() error {
 	return nil
 }
 
-//判断中断信号
+// 判断中断信号
 func (r *Runer) gotInterrupt() bool {
 	select {
 	case <-r.Interrupt:
